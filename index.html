@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Karasoap — Soap made with care, at scale</title>
+<meta name="description" content="Karasoap is a soap factory producing natural bar soaps, liquid soaps and private-label products for retailers, hotels and brands.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #f7f2ea;
+    --paper: #fffdf9;
+    --ink: #2b2620;
+    --muted: #6d645a;
+    --sage: #7d8f6a;
+    --sage-dark: #56664a;
+    --clay: #c7794f;
+    --line: #e4dbcd;
+    --radius: 18px;
+    --max: 1120px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: "Inter", system-ui, sans-serif;
+    color: var(--ink);
+    background: var(--cream);
+    line-height: 1.6;
+    font-size: 17px;
+  }
+  h1, h2, h3 { font-family: "Fraunces", Georgia, serif; font-weight: 600; line-height: 1.15; }
+  a { color: inherit; }
+  .wrap { max-width: var(--max); margin: 0 auto; padding: 0 24px; }
+
+  /* Header */
+  header {
+    position: sticky; top: 0; z-index: 10;
+    background: rgba(247, 242, 234, 0.92);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--line);
+  }
+  .nav { display: flex; align-items: center; justify-content: space-between; height: 68px; }
+  .logo { font-family: "Fraunces", serif; font-size: 1.5rem; font-weight: 600; text-decoration: none; letter-spacing: -0.01em; }
+  .logo span { color: var(--sage); }
+  .nav ul { display: flex; gap: 28px; list-style: none; align-items: center; }
+  .nav ul a { text-decoration: none; color: var(--muted); font-size: 0.95rem; }
+  .nav ul a:hover { color: var(--ink); }
+  .btn {
+    display: inline-block; text-decoration: none; font-weight: 500;
+    padding: 12px 22px; border-radius: 999px;
+    background: var(--sage-dark); color: #fff !important;
+    transition: background 0.2s;
+  }
+  .btn:hover { background: var(--ink); }
+  .btn.ghost { background: transparent; color: var(--ink) !important; border: 1.5px solid var(--ink); }
+  .btn.ghost:hover { background: var(--ink); color: #fff !important; }
+  .nav .btn { padding: 9px 18px; font-size: 0.9rem; }
+
+  /* Hero */
+  .hero { padding: 88px 0 96px; }
+  .hero .wrap { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 56px; align-items: center; }
+  .eyebrow { text-transform: uppercase; letter-spacing: 0.14em; font-size: 0.78rem; color: var(--clay); font-weight: 600; margin-bottom: 18px; }
+  .hero h1 { font-size: clamp(2.4rem, 5vw, 3.8rem); margin-bottom: 22px; letter-spacing: -0.02em; }
+  .hero p.lead { font-size: 1.15rem; color: var(--muted); max-width: 520px; margin-bottom: 34px; }
+  .hero .actions { display: flex; gap: 14px; flex-wrap: wrap; }
+
+  .soap-stack { position: relative; height: 380px; }
+  .bar {
+    position: absolute; border-radius: 28px;
+    box-shadow: 0 18px 40px rgba(60, 45, 30, 0.14), inset 0 -8px 0 rgba(0,0,0,0.05), inset 0 6px 0 rgba(255,255,255,0.35);
+    display: flex; align-items: center; justify-content: center;
+    font-family: "Fraunces", serif; font-size: 1.05rem; letter-spacing: 0.2em; color: rgba(43,38,32,0.35);
+  }
+  .bar.b1 { width: 250px; height: 150px; background: #e9dcc6; top: 30px; left: 40px; transform: rotate(-8deg); }
+  .bar.b2 { width: 230px; height: 140px; background: #b9c6a5; top: 150px; left: 150px; transform: rotate(6deg); }
+  .bar.b3 { width: 210px; height: 128px; background: #e2b59a; top: 250px; left: 30px; transform: rotate(-3deg); }
+  .bubble { position: absolute; border-radius: 50%; border: 2px solid rgba(125, 143, 106, 0.45); background: rgba(255,255,255,0.4); }
+  .bubble.u1 { width: 46px; height: 46px; top: 0; right: 40px; }
+  .bubble.u2 { width: 22px; height: 22px; top: 70px; right: 12px; }
+  .bubble.u3 { width: 30px; height: 30px; bottom: 30px; right: 60px; }
+
+  /* Stats strip */
+  .stats { background: var(--paper); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+  .stats .wrap { display: grid; grid-template-columns: repeat(4, 1fr); }
+  .stat { padding: 34px 20px; text-align: center; border-right: 1px solid var(--line); }
+  .stat:last-child { border-right: none; }
+  .stat strong { display: block; font-family: "Fraunces", serif; font-size: 2rem; color: var(--sage-dark); }
+  .stat span { color: var(--muted); font-size: 0.92rem; }
+
+  /* Sections */
+  section { padding: 100px 0; }
+  .section-head { max-width: 640px; margin-bottom: 56px; }
+  .section-head h2 { font-size: clamp(2rem, 3.6vw, 2.7rem); margin-bottom: 14px; letter-spacing: -0.01em; }
+  .section-head p { color: var(--muted); font-size: 1.08rem; }
+
+  /* Products */
+  .products { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+  .card { background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius); padding: 30px; }
+  .card .swatch { height: 150px; border-radius: 14px; margin-bottom: 24px; display: flex; align-items: center; justify-content: center; }
+  .card .swatch i {
+    display: block; width: 120px; height: 74px; border-radius: 18px;
+    box-shadow: 0 10px 22px rgba(60,45,30,0.15), inset 0 5px 0 rgba(255,255,255,0.35);
+  }
+  .card .swatch i.bottle { width: 64px; height: 110px; border-radius: 16px 16px 20px 20px; position: relative; }
+  .card .swatch i.bottle::before {
+    content: ""; position: absolute; top: -18px; left: 22px; width: 20px; height: 18px; border-radius: 4px 4px 0 0; background: var(--ink); opacity: 0.75;
+  }
+  .card h3 { font-size: 1.35rem; margin-bottom: 10px; }
+  .card p { color: var(--muted); font-size: 0.98rem; margin-bottom: 16px; }
+  .card ul { list-style: none; font-size: 0.92rem; }
+  .card li { padding: 6px 0; border-top: 1px dashed var(--line); }
+
+  /* Private label */
+  .private { background: var(--sage-dark); color: #f4f1ea; border-radius: 28px; padding: 64px; display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: center; }
+  .private h2 { font-size: clamp(2rem, 3.4vw, 2.6rem); margin-bottom: 16px; }
+  .private p { color: rgba(244, 241, 234, 0.8); margin-bottom: 28px; }
+  .private .btn { background: var(--cream); color: var(--ink) !important; }
+  .private .btn:hover { background: #fff; }
+  .steps { list-style: none; counter-reset: s; }
+  .steps li { counter-increment: s; display: grid; grid-template-columns: 44px 1fr; gap: 16px; padding: 16px 0; border-top: 1px solid rgba(255,255,255,0.15); }
+  .steps li:first-child { border-top: none; }
+  .steps li::before {
+    content: counter(s); width: 36px; height: 36px; border-radius: 50%;
+    background: rgba(255,255,255,0.14); display: flex; align-items: center; justify-content: center;
+    font-family: "Fraunces", serif; font-weight: 600;
+  }
+  .steps strong { display: block; color: #fff; }
+  .steps span { color: rgba(244, 241, 234, 0.72); font-size: 0.95rem; }
+
+  /* Why us */
+  .why { display: grid; grid-template-columns: repeat(4, 1fr); gap: 32px; }
+  .why div { border-top: 2px solid var(--clay); padding-top: 20px; }
+  .why h3 { font-size: 1.15rem; margin-bottom: 8px; }
+  .why p { color: var(--muted); font-size: 0.95rem; }
+
+  /* Clients */
+  .who { background: var(--paper); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+  .who-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+  .who-grid div { padding: 26px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--cream); }
+  .who-grid h3 { font-size: 1.1rem; margin-bottom: 6px; }
+  .who-grid p { color: var(--muted); font-size: 0.92rem; }
+
+  /* Contact */
+  .contact { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: start; }
+  .contact-info dl { display: grid; gap: 22px; margin-top: 8px; }
+  .contact-info dt { font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--clay); font-weight: 600; margin-bottom: 4px; }
+  .contact-info dd a { text-decoration: none; border-bottom: 1px solid var(--line); }
+  form { background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius); padding: 34px; display: grid; gap: 16px; }
+  label { font-size: 0.88rem; font-weight: 500; display: grid; gap: 6px; }
+  input, select, textarea {
+    font: inherit; font-size: 0.98rem; padding: 12px 14px; border: 1px solid var(--line); border-radius: 10px; background: #fff; color: var(--ink);
+  }
+  input:focus, select:focus, textarea:focus { outline: 2px solid var(--sage); outline-offset: 1px; }
+  textarea { min-height: 110px; resize: vertical; }
+  form .btn { border: none; cursor: pointer; font-size: 1rem; justify-self: start; }
+  .form-note { font-size: 0.82rem; color: var(--muted); }
+
+  footer { padding: 40px 0; border-top: 1px solid var(--line); color: var(--muted); font-size: 0.9rem; }
+  footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+
+  @media (max-width: 900px) {
+    .hero .wrap, .private, .contact { grid-template-columns: 1fr; }
+    .soap-stack { height: 330px; max-width: 400px; }
+    .products { grid-template-columns: 1fr; }
+    .why, .who-grid { grid-template-columns: 1fr 1fr; }
+    .stats .wrap { grid-template-columns: 1fr 1fr; }
+    .stat:nth-child(2) { border-right: none; }
+    .stat:nth-child(-n+2) { border-bottom: 1px solid var(--line); }
+    .private { padding: 40px 28px; }
+    .nav ul li:not(:last-child) { display: none; }
+  }
+  @media (max-width: 560px) {
+    section { padding: 72px 0; }
+    .hero { padding: 56px 0 64px; }
+    .why, .who-grid { grid-template-columns: 1fr; }
+    .bar.b1 { width: 200px; height: 120px; left: 10px; }
+    .bar.b2 { width: 190px; height: 116px; left: 100px; }
+    .bar.b3 { width: 170px; height: 104px; left: 10px; top: 230px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <nav class="wrap nav">
+    <a href="#" class="logo">kara<span>soap</span></a>
+    <ul>
+      <li><a href="#products">Products</a></li>
+      <li><a href="#private-label">Private label</a></li>
+      <li><a href="#why">Why Karasoap</a></li>
+      <li><a href="#contact" class="btn">Request a quote</a></li>
+    </ul>
+  </nav>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="wrap">
+      <div>
+        <p class="eyebrow">Soap factory &middot; Wholesale &amp; private label</p>
+        <h1>Honest soap, made with care, at scale.</h1>
+        <p class="lead">Karasoap produces natural bar soaps, liquid soaps and custom-branded products for retailers, hotels and growing brands. Small-batch quality, factory capacity.</p>
+        <div class="actions">
+          <a href="#contact" class="btn">Request a quote</a>
+          <a href="#products" class="btn ghost">See our products</a>
+        </div>
+      </div>
+      <div class="soap-stack" aria-hidden="true">
+        <div class="bubble u1"></div><div class="bubble u2"></div><div class="bubble u3"></div>
+        <div class="bar b1">KARA</div>
+        <div class="bar b2">KARA</div>
+        <div class="bar b3">KARA</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="stats">
+    <div class="wrap">
+      <div class="stat"><strong>100%</strong><span>Plant-based oils</span></div>
+      <div class="stat"><strong>500+</strong><span>Minimum order, bars</span></div>
+      <div class="stat"><strong>3&ndash;4 wks</strong><span>Typical lead time</span></div>
+      <div class="stat"><strong>EU</strong><span>Cosmetic-compliant</span></div>
+    </div>
+  </div>
+
+  <section id="products">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">What we make</p>
+        <h2>Three product lines, one standard.</h2>
+        <p>Every formula starts with gentle, plant-based ingredients and is produced in our own facility from mixing to packing.</p>
+      </div>
+      <div class="products">
+        <article class="card">
+          <div class="swatch" style="background:#efe5d4"><i style="background:#e9dcc6"></i></div>
+          <h3>Natural bar soaps</h3>
+          <p>Cold-process and glycerin bars made with olive, coconut and shea oils.</p>
+          <ul>
+            <li>Unscented &amp; essential-oil scents</li>
+            <li>Goat milk, oat, clay &amp; charcoal variants</li>
+            <li>100 g and 150 g formats</li>
+          </ul>
+        </article>
+        <article class="card">
+          <div class="swatch" style="background:#e3e9da"><i class="bottle" style="background:#b9c6a5"></i></div>
+          <h3>Liquid soaps</h3>
+          <p>Hand and body washes with mild, skin-friendly surfactants.</p>
+          <ul>
+            <li>250 ml pump bottles</li>
+            <li>1 L and 5 L refill containers</li>
+            <li>Sulphate-free options</li>
+          </ul>
+        </article>
+        <article class="card">
+          <div class="swatch" style="background:#f3e1d5"><i style="background:#e2b59a; width:84px; height:56px"></i></div>
+          <h3>Hotel &amp; guest amenities</h3>
+          <p>Mini bars and dispensers designed for hospitality and short-stay rentals.</p>
+          <ul>
+            <li>20&ndash;40 g wrapped mini bars</li>
+            <li>Wall-dispenser refills</li>
+            <li>Custom logo embossing</li>
+          </ul>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section id="private-label" style="padding-top:0">
+    <div class="wrap">
+      <div class="private">
+        <div>
+          <p class="eyebrow" style="color:#f0c9ae">Private label</p>
+          <h2>Your brand, our factory.</h2>
+          <p>Launch or grow your own soap line without building production. We handle formulation, manufacturing and packaging &mdash; you put your name on it.</p>
+          <a href="#contact" class="btn">Start a private-label project</a>
+        </div>
+        <ol class="steps">
+          <li><div><strong>Brief</strong><span>Tell us your product, target customer and quantities.</span></div></li>
+          <li><div><strong>Samples</strong><span>We develop scents and formulas and send samples for approval.</span></div></li>
+          <li><div><strong>Packaging</strong><span>Choose wrapping, boxes or bottles and add your branding.</span></div></li>
+          <li><div><strong>Production &amp; delivery</strong><span>We produce, quality-check and ship to your warehouse.</span></div></li>
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <section id="why">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">Why Karasoap</p>
+        <h2>Made properly, delivered reliably.</h2>
+      </div>
+      <div class="why">
+        <div><h3>Clean ingredients</h3><p>Plant oils, natural colorants and no unnecessary additives.</p></div>
+        <div><h3>In-house production</h3><p>Mixing, curing, cutting and packing all happen under one roof.</p></div>
+        <div><h3>Flexible volumes</h3><p>Low minimums for new brands, capacity for large retail orders.</p></div>
+        <div><h3>Quality checked</h3><p>Every batch is tested and documented before it leaves the factory.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="who">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">Who we work with</p>
+        <h2>Built for businesses.</h2>
+      </div>
+      <div class="who-grid">
+        <div><h3>Retailers</h3><p>Shops, pharmacies and concept stores stocking natural soap.</p></div>
+        <div><h3>Hotels &amp; rentals</h3><p>Guest amenities with your logo, delivered on schedule.</p></div>
+        <div><h3>Beauty brands</h3><p>Private-label lines from first sample to full production.</p></div>
+        <div><h3>Corporate gifts</h3><p>Custom gift boxes for clients, events and teams.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact">
+    <div class="wrap contact">
+      <div class="contact-info">
+        <div class="section-head" style="margin-bottom:32px">
+          <p class="eyebrow">Contact</p>
+          <h2>Let&rsquo;s talk about your order.</h2>
+          <p>Tell us what you need and we&rsquo;ll reply within one business day with pricing and lead times.</p>
+        </div>
+        <dl>
+          <div><dt>Email</dt><dd><a href="mailto:hello@karasoap.com">hello@karasoap.com</a></dd></div>
+          <div><dt>Phone</dt><dd><a href="tel:+40700000000">+40 700 000 000</a></dd></div>
+          <div><dt>Factory</dt><dd>Street address, City, Country</dd></div>
+        </dl>
+      </div>
+      <form id="quote">
+        <label>Name<input name="name" required></label>
+        <label>Company<input name="company"></label>
+        <label>Email<input name="email" type="email" required></label>
+        <label>I&rsquo;m interested in
+          <select name="interest">
+            <option>Natural bar soaps</option>
+            <option>Liquid soaps</option>
+            <option>Hotel &amp; guest amenities</option>
+            <option>Private label</option>
+            <option>Something else</option>
+          </select>
+        </label>
+        <label>Message<textarea name="message" placeholder="Product, quantity, timeline…"></textarea></label>
+        <button type="submit" class="btn">Send request</button>
+        <p class="form-note">This opens your email app with your request filled in.</p>
+      </form>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>&copy; <span id="yr"></span> Karasoap. All rights reserved.</span>
+    <span>Soap manufacturing &middot; Wholesale &middot; Private label</span>
+  </div>
+</footer>
+
+<script>
+  document.getElementById("yr").textContent = new Date().getFullYear();
+  document.getElementById("quote").addEventListener("submit", function (e) {
+    e.preventDefault();
+    var f = e.target;
+    var subject = "Quote request: " + f.interest.value + (f.company.value ? " — " + f.company.value : "");
+    var body = "Name: " + f.name.value + "\nCompany: " + f.company.value + "\nEmail: " + f.email.value +
+               "\nInterested in: " + f.interest.value + "\n\n" + f.message.value;
+    window.location.href = "mailto:hello@karasoap.com?subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(body);
+  });
+</script>
+</body>
+</html>
